@@ -5,7 +5,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Task.DatabaseMigration;
-using Task.Shared.Security;
+
 
 namespace Task.Database
 {
@@ -37,17 +37,7 @@ namespace Task.Database
                     context.Database.Migrate();
             }
 
-            //Console.WriteLine("Now, creating the database for identity...");
 
-            var identityOptionsBuilder = new DbContextOptionsBuilder<ApplicationIdentityDbContext>();
-            identityOptionsBuilder.UseSqlServer(config.GetConnectionString("ConnectionString"));
-            using (ApplicationIdentityDbContext identityContext = new ApplicationIdentityDbContext(identityOptionsBuilder.Options))
-            {
-                identityContext.Database.Migrate();
-                Console.WriteLine("Identity DB is now created");
-            }
-            Console.WriteLine("Database has been updated successfully, Now seeding the database with initial data.");
-            Console.WriteLine("done!");
         }
     }
 }

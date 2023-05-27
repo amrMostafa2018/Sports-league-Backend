@@ -8,8 +8,6 @@ using Task.Application.Lookups.Implamention;
 using Task.DatabaseMigration;
 using Task.Services.Implementation;
 using Task.Shared.Data.Repository;
-using Task.Shared.Repository;
-using Task.Shared.Security;
 using Microsoft.AspNetCore.Identity;
 
 
@@ -30,14 +28,8 @@ namespace Task.Application
 
             services.AddDbContext<TaskDbContext>(options =>
             { options.UseSqlServer(configuration.GetConnectionString("ConnectionString"), builder => builder.EnableRetryOnFailure()); });
-            services.AddScoped<IApplicationIdentityDbContext, ApplicationIdentityDbContext>(provider => provider.GetService<ApplicationIdentityDbContext>());
-            services.AddDbContext<ApplicationIdentityDbContext>(options =>
-                            options.UseSqlServer(
-                                configuration.GetConnectionString("ConnectionString")
-
-                                    ));
+          
             services.AddScoped(typeof(ISharedRepository<,>), typeof(SharedRepository<,>));
-            services.AddScoped(typeof(ISharedIdentityRepository<,>), typeof(SharedIdentityRepository<,>));
             services.AddScoped(typeof(ILookupService<>), typeof(LookupService<>));
             services.AddScoped(typeof(UserManager<>), typeof(UserManager<>));
 

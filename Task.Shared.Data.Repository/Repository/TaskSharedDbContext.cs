@@ -1,8 +1,6 @@
-﻿
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Task.Domain.Entites;
-using Task.Shared.Security;
+
 
 namespace Task.Shared.Data.Repository
 {

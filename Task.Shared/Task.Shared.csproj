@@ -38,4 +38,8 @@
     <ProjectReference Include="..\Task.Domain\Task.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Enums\" />
+  </ItemGroup>
+
 </Project>
