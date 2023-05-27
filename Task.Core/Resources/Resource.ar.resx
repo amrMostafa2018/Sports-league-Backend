@@ -129,4 +129,7 @@
   <data name="TeamNotFound" xml:space="preserve">
     <value>عفوا .. لا يوجد فريق برقم  {0}</value>
   </data>
+  <data name="TwoTeamsIsSame" xml:space="preserve">
+    <value>عفوا .. الفريقين هما واحد  برقم {0}</value>
+  </data>
 </root>

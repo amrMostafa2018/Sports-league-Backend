@@ -10,6 +10,8 @@ using Task.Shared.API;
 using Task.Domain.Entites;
 using Microsoft.EntityFrameworkCore;
 using Task.Application.Models.TeamSchedule.GetScheduleByTeam;
+using Task.Application.Models.TeamSchedule.Add;
+using Task.Application.Models.TeamSchedule.Get;
 
 namespace Task.Services.Implementation
 {
@@ -25,6 +27,27 @@ namespace Task.Services.Implementation
         {
             _teamRepository = teamRepository;
             _teamScheduleRepository = teamScheduleRepository;
+        }
+
+
+        public async Task<OperationResult<GetAllTeamScheduleResponse>> GetAll()
+        {
+            try
+            {
+                _logger.LogInformation($"Start GetAll Method Ins Team Schedule Service");
+              
+                var teamSchedule = _teamScheduleRepository.Find(n => !n.IsDeleted).Include(h => h.HomeTeam).Include(w => w.AwayTeam).ToList();
+                GetAllTeamScheduleResponse getAllTeamScheduleResponse = new GetAllTeamScheduleResponse()
+                {
+                    Items = _mapper.Map<List<GetScheduleTeamModel>>(teamSchedule)
+                };
+                return OperationResult<GetAllTeamScheduleResponse>.Success(getAllTeamScheduleResponse);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Exception In GetAll Method In Team Schedule Service");
+                return OperationResult<GetAllTeamScheduleResponse>.Fail(HttpErrorCode.ServerError, CommonErrorCodes.SERVER_ERROR, _localizer["ServerError"].Value);
+            }
         }
 
         public async Task<OperationResult<GetScheduleTeamResponse>> GetSchedule(int id)
@@ -53,6 +76,27 @@ namespace Task.Services.Implementation
             }
         }
 
+        public async Task<OperationResult<int>> Add(TeamScheduleRequest teamScheduleRequest)
+        {
+            try
+            {
+                _logger.LogInformation($"Start Add Method In Team Schedule Service");
+                if(teamScheduleRequest.HomeTeamId == teamScheduleRequest.AwayTeamId)
+                {
+                    _logger.LogInformation($"Two Team Is Same : {teamScheduleRequest.HomeTeamId}   In Add Method In Team Member Service");
+                    return OperationResult<int>.Fail(HttpErrorCode.Conflict, CommonErrorCodes.NOT_FOUND, _localizer["TwoTeamsIsSame", teamScheduleRequest.HomeTeamId].Value);
+                }
+                TeamSchedule teamScheduleEnitity = _mapper.Map<TeamSchedule>(teamScheduleRequest);
+                await _teamScheduleRepository.Add(teamScheduleEnitity);
+
+                return OperationResult<int>.Success(teamScheduleEnitity.Id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Exception In Add Method In Team Schedule Service");
+                return OperationResult<int>.Fail(HttpErrorCode.ServerError, CommonErrorCodes.SERVER_ERROR, _localizer["ServerError"].Value);
+            }
+        }
 
     }
 }

@@ -129,4 +129,7 @@
   <data name="TeamNotFound" xml:space="preserve">
     <value>Sorry .. Not Found Team With Id : {0}</value>
   </data>
+  <data name="TwoTeamsIsSame" xml:space="preserve">
+    <value>Sorry .. Two Teams Is Same With Id : {0}</value>
+  </data>
 </root>
